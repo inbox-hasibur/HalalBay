@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   },
 };
 
+import SmoothScroll from "@/components/SmoothScroll";
+import CustomCursor from "@/components/CustomCursor";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,10 +32,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-surface-1 text-text-primary antialiased">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="min-h-full flex flex-col bg-surface-1 text-text-primary antialiased selection:bg-[var(--color-brand-green)] selection:text-white">
+        <SmoothScroll>
+          <CustomCursor />
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );

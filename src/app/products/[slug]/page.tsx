@@ -17,7 +17,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     notFound();
   }
 
-  // Determine placeholder emoji
   const icon = 
     product.category === "Smartwatches" ? "⌚" :
     product.category === "Footwear" ? "👟" :
@@ -26,121 +25,96 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     product.category === "Bags" ? "👜" : "📱";
 
   return (
-    <div className="flex flex-col min-h-screen pt-24 pb-20 px-4 bg-[var(--color-surface-1)]">
-      <div className="max-w-6xl mx-auto w-full">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-[var(--color-text-muted)] mb-8">
-          <Link href="/products" className="hover:text-[var(--color-brand-gold)] transition-colors">Products</Link>
+    <div className="flex flex-col min-h-screen pt-24 pb-20 px-4 bg-[var(--color-surface-1)] overflow-hidden">
+      <div className="max-w-6xl mx-auto w-full relative">
+        <nav className="flex items-center gap-2 text-sm text-[var(--color-text-muted)] mb-8 animate-fade-in-up">
+          <Link href="/products" className="hover:text-[var(--color-brand-gold)] transition-colors">Vault</Link>
           <span>/</span>
           <span className="text-[var(--color-text-secondary)]">{product.category}</span>
           <span>/</span>
-          <span className="text-[var(--color-text-primary)] font-medium truncate max-w-[200px]">{product.name}</span>
+          <span className="text-[var(--color-text-primary)] font-bold truncate max-w-[200px]">{product.name}</span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Left: Image Gallery */}
-          <div className="flex flex-col gap-4">
-            <div className="relative aspect-square rounded-3xl overflow-hidden glass-card flex flex-col items-center justify-center p-8 border border-[var(--color-surface-border)]">
-              <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
-                style={{ background: 'rgba(10,110,78,0.15)', border: '1px solid rgba(10,110,78,0.3)', color: 'var(--color-brand-green-light)' }}>
-                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 1l2.39 6.26L19 8.27l-5 4.86 1.18 6.87L10 16.77l-5.18 3.23L6 13.13 1 8.27l6.61-1.01L10 1z" clipRule="evenodd" />
-                </svg>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+          
+          {/* Left: Interactive Image Area */}
+          <div className="flex flex-col gap-6 sticky top-28 h-fit animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            <div className="relative aspect-square rounded-[2.5rem] overflow-hidden glass-card flex flex-col items-center justify-center p-8 border border-[var(--color-surface-border)] group">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,168,76,0.1)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              
+              <div className="absolute top-6 left-6 z-10 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold backdrop-blur-md"
+                style={{ background: 'rgba(10,110,78,0.2)', border: '1px solid rgba(10,110,78,0.4)', color: 'var(--color-brand-green-light)' }}>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-brand-green)] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--color-brand-green)]"></span>
+                </span>
                 Verified Authentic Source
               </div>
-              <div className="text-[12rem] opacity-80 filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] transform hover:scale-105 transition-transform duration-500">
+              
+              <div className="text-[14rem] sm:text-[18rem] opacity-90 drop-shadow-[0_40px_60px_rgba(0,0,0,0.8)] filter transition-all duration-700 scale-95 group-hover:scale-105 group-hover:rotate-12 group-hover:drop-shadow-[0_60px_80px_rgba(201,168,76,0.3)]">
                 {icon}
               </div>
             </div>
-            {/* Thumbnails placeholder */}
-            <div className="grid grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map(idx => (
-                <div key={idx} className="aspect-square rounded-xl glass-card border border-[var(--color-surface-border)] flex items-center justify-center text-3xl opacity-50 hover:opacity-100 cursor-pointer transition-opacity">
-                  {icon}
-                </div>
-              ))}
-            </div>
-            
-            {/* Guarantee Box */}
-            <div className="mt-4 p-6 rounded-2xl border border-[rgba(201,168,76,0.3)] bg-[rgba(201,168,76,0.05)]">
-              <h3 className="font-bold text-[var(--color-brand-gold)] mb-2 flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+            <div className="p-8 rounded-[2rem] border border-[rgba(201,168,76,0.3)] bg-[rgba(201,168,76,0.05)] backdrop-blur-md hover:bg-[rgba(201,168,76,0.08)] transition-colors">
+              <h3 className="font-black text-xl text-[var(--color-brand-gold)] mb-3 flex items-center gap-3">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                The HalalBay Guarantee
+                The Absolute Guarantee
               </h3>
-              <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                If the grade you receive does not match our exact description, we will refund you 100% of the price along with compensation for breaking your trust.
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed font-medium">
+                If the grade you receive does not match our exact description down to the serial number, we will refund you 100% of the price along with compensation.
               </p>
             </div>
           </div>
 
-          {/* Right: Product Details & Grade Selector */}
-          <div className="flex flex-col pb-10">
-            <div className="mb-6">
-              <h2 className="text-sm font-semibold text-[var(--color-text-muted)] tracking-wider uppercase mb-2">
+          {/* Right: Info & Grades */}
+          <div className="flex flex-col pb-10 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+            <div className="mb-8">
+              <h2 className="text-sm font-black text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-4">
                 {product.brand}
               </h2>
-              <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-text-primary)] leading-tight mb-4">
+              <h1 className="text-5xl md:text-6xl font-black text-[var(--color-text-primary)] leading-[1.1] tracking-tighter mb-6">
                 {product.name}
               </h1>
-              <div className="flex items-center gap-4 text-sm font-medium">
-                <div className="flex items-center gap-1 text-[var(--color-brand-gold)]">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <div className="flex items-center gap-6 text-sm font-bold bg-[var(--color-surface-2)] inline-flex px-6 py-3 rounded-2xl border border-[var(--color-surface-border)]">
+                <div className="flex items-center gap-2 text-[var(--color-brand-gold)]">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
-                  <span>{product.rating}</span>
+                  <span className="text-lg">{product.rating}</span>
                 </div>
-                <span className="text-[var(--color-text-muted)] border-l border-[var(--color-surface-border)] pl-4">
-                  Reviewed by {product.reviewCount} trusted buyers
+                <div className="w-px h-6 bg-[var(--color-surface-border)]" />
+                <span className="text-[var(--color-text-secondary)]">
+                  {product.reviewCount} <span className="text-[var(--color-text-muted)]">Vault Members</span>
                 </span>
               </div>
             </div>
 
-            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed mb-10">
+            <p className="text-lg md:text-xl text-[var(--color-text-secondary)] leading-relaxed mb-12 font-medium">
               {product.description}
             </p>
 
             {/* Core Grading UI */}
-            <div className="mb-10 relative">
-              <div id="grade-explainer" className="scroll-mt-32"></div>
+            <div className="mb-14 relative z-20">
+              <div id="grade-explainer" className="scroll-mt-32" />
               <GradeSelector grades={product.grades} />
             </div>
 
-            {/* Add to Cart CTA */}
-            <div className="mt-auto flex flex-col sm:flex-row items-center gap-4 fixed bottom-0 left-0 right-0 p-4 sm:p-0 sm:relative sm:bg-transparent z-40 bg-[rgba(11,15,14,0.9)] sm:backdrop-filter-none backdrop-blur-md border-t border-[var(--color-surface-border)] sm:border-0">
-              <button className="flex-1 w-full py-4 rounded-xl text-lg font-bold transition-all duration-300 shadow-[0_4px_20px_rgba(10,110,78,0.3)] hover:shadow-[0_8px_30px_rgba(10,110,78,0.5)] transform hover:-translate-y-1"
+            {/* Sticky Add to Cart */}
+            <div className="mt-auto flex flex-col sm:flex-row items-center gap-4 fixed bottom-0 left-0 right-0 p-4 sm:p-0 sm:relative sm:bg-transparent z-40 bg-[rgba(11,15,14,0.8)] sm:backdrop-filter-none backdrop-blur-2xl border-t border-[var(--color-surface-border)] sm:border-0 hover:z-50">
+              <button className="flex-1 w-full py-5 rounded-2xl text-xl font-black uppercase tracking-widest transition-all duration-500 shadow-[0_10px_40px_rgba(10,110,78,0.4)] hover:shadow-[0_20px_60px_rgba(10,110,78,0.6)] transform hover:-translate-y-2 hover:scale-[1.02]"
                 style={{ background: 'linear-gradient(135deg, var(--color-brand-green), var(--color-brand-green-light))', color: '#fff' }}>
-                Add to Cart
+                Acquire Now
               </button>
-              <button className="sm:w-16 w-full py-4 rounded-xl flex items-center justify-center shrink-0 border border-[var(--color-surface-border)] bg-[var(--color-surface-3)] text-[var(--color-text-primary)] hover:border-[var(--color-brand-gold)] hover:text-[var(--color-brand-gold)] transition-colors">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <button className="sm:w-20 w-full py-5 rounded-2xl flex items-center justify-center shrink-0 border-2 border-[var(--color-surface-border)] bg-[var(--color-surface-2)] text-[var(--color-text-primary)] hover:border-[var(--color-brand-gold)] hover:bg-[rgba(201,168,76,0.1)] hover:text-[var(--color-brand-gold)] transition-colors duration-300">
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </button>
             </div>
             
-            {/* Extra Info Accordion */}
-            <div className="mt-12 space-y-4 pt-10 border-t border-[var(--color-surface-border)]">
-              {["Product Specifications", "Shipping & Delivery", "Returns Policy"].map((title, i) => (
-                <details key={i} className="group glass-card rounded-xl border border-[var(--color-surface-border)] overflow-hidden">
-                  <summary className="flex items-center justify-between p-5 font-semibold cursor-pointer text-[var(--color-text-primary)] list-none">
-                    {title}
-                    <span className="transition-transform group-open:rotate-180">
-                      <svg className="w-5 h-5 text-[var(--color-text-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </span>
-                  </summary>
-                  <div className="p-5 pt-0 text-sm text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-surface-border)]">
-                    {i === 0 && "Detailed specifications depend on the selected grade. Authentic grades come with original manufacturer specs. Master copies will have minor dimensional weight differences but feature 1:1 aesthetics."}
-                    {i === 1 && "Standard delivery across Bangladesh within 3-5 business days. Express next-day delivery available for Dhaka metro."}
-                    {i === 2 && "If the product does not match the described grade exactly, you can return it within 7 days for a full refund."}
-                  </div>
-                </details>
-              ))}
-            </div>
-
           </div>
         </div>
       </div>
