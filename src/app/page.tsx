@@ -117,11 +117,11 @@ export default function Home() {
             initial={{ y: 80, opacity: 0, filter: "blur(10px)" }}
             animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="relative text-[4rem] md:text-[8rem] lg:text-[11rem] font-bold tracking-[-0.04em] text-[var(--color-text-primary)] mb-6 leading-[0.85] uppercase"
+            className="relative text-[4rem] md:text-[8rem] lg:text-[11rem] font-bold tracking-[-0.04em] text-[var(--color-text-primary)] mb-6 leading-[0.85] uppercase opacity-90 mix-blend-multiply dark:mix-blend-normal"
           >
             <span className="absolute -inset-4 bg-[var(--color-brand-gold)] opacity-[0.03] blur-3xl rounded-full" />
             We <br className="md:hidden" /> verify. <br />
-            <span className="opacity-50 text-[3rem] md:text-[6rem] lg:text-[7rem] block mt-2 tracking-[-0.02em] font-medium normal-case bg-clip-text text-transparent bg-gradient-to-r dark:from-white dark:to-white/40 from-black to-black/60">We don&apos;t just sell.</span>
+            <span className="opacity-70 text-[3rem] md:text-[6rem] lg:text-[7rem] block mt-2 tracking-[-0.02em] font-medium normal-case bg-clip-text text-transparent bg-gradient-to-r dark:from-white dark:to-white/40 from-black/80 to-black/30">We don&apos;t just sell.</span>
           </motion.h1>
           
           <motion.p 
@@ -220,7 +220,7 @@ export default function Home() {
       </section>
 
       {/* Parallax Image / Video Break */}
-      <section ref={parallaxRef} className="h-[80vh] relative overflow-hidden flex items-center justify-center bg-[var(--color-surface-2)]">
+      <section ref={parallaxRef} className="h-[80vh] relative overflow-hidden flex items-center justify-center bg-[var(--color-surface-2)]/30 backdrop-blur-[40px] border-y border-[var(--color-surface-border)]">
         <motion.div 
           style={{ y: parallaxY }}
           className="absolute inset-0 w-full h-[140%] -top-[20%]">
@@ -238,7 +238,7 @@ export default function Home() {
       </section>
 
       {/* How Grading Works - Aesthetic Cards */}
-      <section id="how-it-works" className="py-40 overflow-hidden relative border-y border-[var(--color-surface-border)] bg-[var(--color-surface-1)]">
+      <section id="how-it-works" className="py-40 overflow-hidden relative border-y border-[var(--color-surface-border)] bg-[var(--color-surface-1)]/30 backdrop-blur-3xl">
         <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--color-brand-gold)] opacity-[0.02] blur-[150px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4">
@@ -302,7 +302,7 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-40 px-4 relative bg-[var(--color-surface-2)]">
+      <section className="py-40 px-4 relative bg-[var(--color-surface-2)]/40 backdrop-blur-[60px] border-y border-[var(--color-surface-border)]">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
             <motion.div 
@@ -343,7 +343,7 @@ export default function Home() {
       </section>
 
       {/* Epic Footer CTA */}
-      <section className="h-screen py-40 px-4 relative overflow-hidden bg-[var(--color-surface-1)] flex items-center justify-center border-y border-[var(--color-surface-border)]">
+      <section className="h-screen py-40 px-4 relative overflow-hidden bg-[var(--color-surface-1)]/20 backdrop-blur-3xl flex items-center justify-center border-y border-[var(--color-surface-border)]">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-surface-2)_0%,transparent_70%)] opacity-30" />
         
         <motion.div 
