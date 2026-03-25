@@ -100,13 +100,13 @@ export default function Home() {
         {/* Hero Content */}
         <motion.div 
           style={{ y: heroY, opacity: heroOpacity }}
-          className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center text-center mt-auto mb-20"
+          className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center text-center mt-auto mb-20 px-4 sm:px-8"
         >
           <motion.div 
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-[var(--color-surface-border)] glass-card mb-10 overflow-hidden relative"
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[var(--color-surface-border)] glass-card mb-8 overflow-hidden relative text-xs sm:text-sm"
           >
             <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent)] w-[200%] animate-sweep dark:opacity-100 opacity-20" />
             <span className="w-2 h-2 rounded-full bg-[var(--color-brand-gold)] animate-pulse-glow" />
@@ -117,7 +117,7 @@ export default function Home() {
             initial={{ y: 80, opacity: 0, filter: "blur(10px)" }}
             animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="relative text-[4rem] md:text-[8rem] lg:text-[11rem] font-bold tracking-[-0.04em] text-[var(--color-text-primary)] mb-6 leading-[0.85] uppercase opacity-90 mix-blend-multiply dark:mix-blend-normal"
+            className="relative text-[2.4rem] sm:text-[3.5rem] md:text-[6rem] lg:text-[8rem] font-bold tracking-[-0.04em] text-[var(--color-text-primary)] mb-4 sm:mb-6 leading-[1.05] uppercase opacity-90 mix-blend-multiply dark:mix-blend-normal"
           >
             <span className="absolute -inset-4 bg-[var(--color-brand-gold)] opacity-[0.03] blur-3xl rounded-full" />
             We <br className="md:hidden" /> verify. <br />
@@ -128,7 +128,7 @@ export default function Home() {
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="text-lg md:text-2xl text-[var(--color-text-secondary)] max-w-3xl mb-14 font-light leading-relaxed"
+            className="text-base sm:text-lg md:text-2xl text-[var(--color-text-secondary)] max-w-3xl mb-12 font-light leading-relaxed"
           >
             Every product exclusively sourced, graded, and verified by our experts. 
             <span className="text-[var(--color-text-primary)] font-normal dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"> Zero third-party sellers. Zero fakes.</span>
@@ -138,9 +138,10 @@ export default function Home() {
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row items-center gap-6">
+            className="w-full flex flex-col sm:flex-row items-center sm:justify-center gap-4"
+          >
             <Link href="/products"
-              className="relative px-12 py-5 rounded-full text-lg font-medium overflow-hidden group bg-[var(--color-text-primary)] text-[var(--color-surface-1)] hover:scale-105 transition-transform duration-500 ease-[0.16,1,0.3,1]">
+              className="w-full sm:w-auto text-center relative px-8 sm:px-12 py-4 rounded-full text-base sm:text-lg font-medium overflow-hidden group bg-[var(--color-text-primary)] text-[var(--color-surface-1)] hover:scale-105 transition-transform duration-500 ease-[0.16,1,0.3,1]">
               <span className="relative z-10 transition-colors duration-500 group-hover:text-[var(--color-text-primary)]">Enter The Vault</span>
               <div className="absolute inset-0 bg-[var(--color-surface-2)] transform scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom duration-500 ease-[0.16,1,0.3,1]" />
             </Link>
@@ -220,7 +221,7 @@ export default function Home() {
       </section>
 
       {/* Parallax Image / Video Break */}
-      <section ref={parallaxRef} className="h-[80vh] relative overflow-hidden flex items-center justify-center bg-[var(--color-surface-2)]/30 backdrop-blur-[40px] border-y border-[var(--color-surface-border)]">
+      <section ref={parallaxRef} className="h-[60vh] sm:h-[75vh] md:h-[80vh] relative overflow-hidden flex items-center justify-center bg-[var(--color-surface-2)]/30 backdrop-blur-[40px] border-y border-[var(--color-surface-border)]">
         <motion.div 
           style={{ y: parallaxY }}
           className="absolute inset-0 w-full h-[140%] -top-[20%]">
@@ -343,7 +344,7 @@ export default function Home() {
       </section>
 
       {/* Epic Footer CTA */}
-      <section className="h-screen py-40 px-4 relative overflow-hidden bg-[var(--color-surface-1)]/20 backdrop-blur-3xl flex items-center justify-center border-y border-[var(--color-surface-border)]">
+      <section className="min-h-[70vh] md:h-screen py-28 md:py-40 px-4 relative overflow-hidden bg-[var(--color-surface-1)]/20 backdrop-blur-3xl flex items-center justify-center border-y border-[var(--color-surface-border)]">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-surface-2)_0%,transparent_70%)] opacity-30" />
         
         <motion.div 
