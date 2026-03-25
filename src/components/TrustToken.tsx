@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useMemo, useState, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { Float, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTheme } from 'next-themes';
@@ -13,6 +13,7 @@ export default function TrustToken() {
   const light3 = useRef<THREE.PointLight>(null);
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { viewport } = useThree();
   
   useEffect(() => {
     setMounted(true);
@@ -20,6 +21,9 @@ export default function TrustToken() {
 
   // Use resolvedTheme for accurate hydration matching
   const isDark = mounted ? (theme === 'dark' || resolvedTheme === 'dark') : true;
+
+  // Responsive scale: smaller on mobile
+  const scale = viewport.width < 768 ? 0.8 : 1.5;
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -69,7 +73,7 @@ export default function TrustToken() {
         <pointLight ref={light3} color={isDark ? "#ff3366" : "#16a34a"} intensity={60} distance={10} />
 
         {/* Matte Opaque Material */}
-        <mesh ref={meshRef} scale={1.5}>
+        <mesh ref={meshRef} scale={scale}>
           <torusKnotGeometry args={[1, 0.35, 128, 32]} />
           <meshStandardMaterial 
             color={isDark ? "#f5f6f7" : "#1e3a8a"} 

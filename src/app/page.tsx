@@ -245,7 +245,7 @@ export default function Home() {
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="relative z-10 text-[5rem] md:text-[10rem] font-bold text-[var(--color-text-primary)] text-center tracking-tighter opacity-30 leading-none">
+          className="relative z-10 text-[3rem] sm:text-[5rem] md:text-[8rem] font-bold text-[var(--color-text-primary)] text-center tracking-tighter opacity-30 leading-none">
           PURITY IN <br /> COMMERCE
         </motion.h2>
       </section>
