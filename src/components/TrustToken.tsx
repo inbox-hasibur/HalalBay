@@ -69,9 +69,9 @@ export default function TrustToken() {
         <mesh ref={meshRef} scale={1.5}>
           <torusKnotGeometry args={[1, 0.35, 128, 32]} />
           <meshStandardMaterial 
-            color={isDark ? "#e5e5e5" : "#111111"} 
+            color={isDark ? "#e5e5e5" : "#000000"} 
             roughness={0.8}
-            metalness={0.1}
+            metalness={0.4}
           />
         </mesh>
 

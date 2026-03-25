@@ -59,9 +59,9 @@ export default function Mini3D({ type }: Mini3DProps) {
             <Sphere args={[0.9, 32, 32]} />
           )}
           <meshStandardMaterial 
-            color={isDark ? "#e5e5e5" : "#111111"} 
+            color={isDark ? "#e5e5e5" : "#000000"} 
             roughness={0.8}
-            metalness={0.1}
+            metalness={0.4}
           />
         </mesh>
       </Float>
