@@ -17,7 +17,10 @@ const GRADE_STYLES: Record<string, { color: string; bg: string; border: string; 
 
 export default function ProductCard({ product }: { product: Product }) {
   const lowestGrade = product.grades.find(g => g.inStock) || product.grades[0];
-  const style = GRADE_STYLES[lowestGrade.label] || GRADE_STYLES["C"];
+  const productGrades = product.grades || [];
+  const topGrade = productGrades[0]?.label || "C";
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const style = GRADE_STYLES[topGrade] || GRADE_STYLES["C"];
   
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -61,10 +64,10 @@ export default function ProductCard({ product }: { product: Product }) {
         className="rounded-3xl overflow-hidden h-full flex flex-col transition-shadow duration-300 relative group"
       >
         {/* Glow effect that follows mouse conceptually via CSS hover */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[rgba(201,168,76,0.15)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[rgba(212,175,55,0.1)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         <article
-          className="relative z-10 rounded-3xl overflow-hidden h-full flex flex-col bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] group-hover:border-[rgba(201,168,76,0.3)] transition-colors duration-500"
+          className="relative z-10 rounded-3xl overflow-hidden h-full flex flex-col bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] group-hover:border-[var(--color-brand-gold)] transition-colors duration-500"
           style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}
         >
           {/* Image area */}
@@ -83,7 +86,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
             {/* Verified badge */}
             <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
-              style={{ background: 'rgba(10,110,78,0.9)', color: '#fff', backdropFilter: 'blur(12px)', transform: "translateZ(50px)" }}>
+              style={{ background: 'rgba(0,0,0,0.8)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(12px)', transform: "translateZ(50px)" }}>
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>

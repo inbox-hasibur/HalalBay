@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import { products, categories } from "@/lib/mockData";
+import { products } from "@/lib/mockData";
 import { Canvas } from "@react-three/fiber";
 import TrustToken from "@/components/TrustToken";
 import { Environment } from "@react-three/drei";
@@ -12,197 +12,285 @@ import { useRef } from "react";
 export default function Home() {
   const featuredProducts = products.slice(0, 4);
   const containerRef = useRef<HTMLDivElement>(null);
+  const parallaxRef = useRef<HTMLDivElement>(null);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   });
 
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const { scrollYProgress: parallaxProgress } = useScroll({
+    target: parallaxRef,
+    offset: ["start end", "end start"]
+  });
+
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const parallaxY = useTransform(parallaxProgress, [0, 1], ["-20%", "20%"]);
 
   const fadeInUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+    hidden: { opacity: 0, y: 60 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const } }
   };
 
   const staggerContainer = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.2 }
+      transition: { staggerChildren: 0.15 }
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden bg-[var(--color-surface-1)]">
+    <div className="flex flex-col min-h-screen overflow-hidden bg-[var(--color-surface-1)] selection:bg-[var(--color-brand-gold)] selection:text-black relative">
+      <div className="bg-noise" />
+      
+      {/* Epic Ambient Mesh Gradient Background */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-60 dark:opacity-30 mix-blend-multiply dark:mix-blend-screen">
+        <motion.div 
+          animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute -top-[20%] -left-[10%] w-0 h-0 rounded-full blur-[120px] md:blur-[250px]"
+          style={{
+            borderTop: '40vw solid #0d9488',
+            borderRight: '40vw solid var(--color-brand-gold)',
+            borderBottom: '40vw solid #e11d48',
+            borderLeft: '40vw solid #4f46e5'
+          }}
+        />
+        <motion.div 
+          animate={{ rotate: [360, 0], scale: [1, 1.2, 1] }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="absolute -bottom-[20%] -right-[10%] w-0 h-0 rounded-full blur-[120px] md:blur-[250px]"
+          style={{
+            borderTop: '50vw solid #0ea5e9',
+            borderRight: '50vw solid #f97316',
+            borderBottom: '50vw solid #065f46',
+            borderLeft: '50vw solid #9333ea'
+          }}
+        />
+      </div>
+
       {/* Hero Section with 3D Canvas */}
-      <section ref={containerRef} className="relative h-screen flex flex-col items-center justify-center px-4 overflow-hidden pt-20">
+      <section ref={containerRef} className="relative h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
+        {/* Subtle glowing orb for depth */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] bg-[var(--color-brand-gold)] opacity-[0.08] blur-[120px] rounded-full pointer-events-none" />
+
         {/* 3D Background */}
-        <div className="absolute inset-x-0 h-[120%] top-[-10%] z-0 pointer-events-none">
+        <div className="absolute inset-x-0 h-[100%] top-0 z-0 pointer-events-none dark:mix-blend-screen opacity-90 transition-all duration-500">
           <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[10, 10, 5]} intensity={1} />
+            <ambientLight intensity={0.2} />
+            <directionalLight position={[10, 10, 5]} intensity={2} color="#ffffff" />
+            <spotLight position={[-10, 10, -5]} intensity={1} color="#D4AF37" />
             <Environment preset="city" />
             <TrustToken />
           </Canvas>
         </div>
 
+        {/* Floating Abstract Shapes */}
+        <motion.div 
+          className="absolute top-[20%] right-[10%] w-24 h-24 border border-[var(--color-brand-gold)] rounded-full opacity-10 pointer-events-none animate-float"
+          style={{ animationDelay: '0.5s' }}
+        />
+        <motion.div 
+          className="absolute bottom-[30%] left-[10%] w-32 h-32 border border-white rounded-lg rotate-45 opacity-[0.03] pointer-events-none animate-float"
+          style={{ animationDelay: '2s' }}
+        />
+
         {/* Hero Content */}
         <motion.div 
           style={{ y: heroY, opacity: heroOpacity }}
-          className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center mt-auto mb-32"
+          className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center text-center mt-auto mb-20"
         >
           <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(201,168,76,0.2)] bg-[rgba(201,168,76,0.05)] backdrop-blur-md mb-8">
-            <span className="w-2 h-2 rounded-full bg-[var(--color-brand-gold)] animate-pulse" />
-            <span className="text-[var(--color-brand-gold)] font-medium tracking-wide text-sm uppercase">The New Standard of Trust</span>
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-[var(--color-surface-border)] glass-card mb-10 overflow-hidden relative"
+          >
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent)] w-[200%] animate-sweep dark:opacity-100 opacity-20" />
+            <span className="w-2 h-2 rounded-full bg-[var(--color-brand-gold)] animate-pulse-glow" />
+            <span className="text-[var(--color-text-primary)] font-medium tracking-widest text-xs uppercase opacity-90 relative z-10">The New Standard of Trust</span>
           </motion.div>
           
           <motion.h1 
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter text-[var(--color-text-primary)] mb-6 leading-[0.9]">
-            We don't just sell. <br />
-            <span className="gradient-text-gold inline-block mt-2">We verify.</span>
+            initial={{ y: 80, opacity: 0, filter: "blur(10px)" }}
+            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="relative text-[4rem] md:text-[8rem] lg:text-[11rem] font-bold tracking-[-0.04em] text-[var(--color-text-primary)] mb-6 leading-[0.85] uppercase"
+          >
+            <span className="absolute -inset-4 bg-[var(--color-brand-gold)] opacity-[0.03] blur-3xl rounded-full" />
+            We <br className="md:hidden" /> verify. <br />
+            <span className="opacity-50 text-[3rem] md:text-[6rem] lg:text-[7rem] block mt-2 tracking-[-0.02em] font-medium normal-case bg-clip-text text-transparent bg-gradient-to-r dark:from-white dark:to-white/40 from-black to-black/60">We don&apos;t just sell.</span>
           </motion.h1>
           
           <motion.p 
-            initial={{ y: 30, opacity: 0 }}
+            initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="text-lg md:text-2xl text-[var(--color-text-secondary)] max-w-2xl mb-12 font-light">
-            Every product exclusively sourced, graded, and 3D-verified by our experts. 
-            Zero third-party sellers. Zero fakes.
+            transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="text-lg md:text-2xl text-[var(--color-text-secondary)] max-w-3xl mb-14 font-light leading-relaxed"
+          >
+            Every product exclusively sourced, graded, and verified by our experts. 
+            <span className="text-[var(--color-text-primary)] font-normal dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"> Zero third-party sellers. Zero fakes.</span>
           </motion.p>
 
           <motion.div 
-            initial={{ y: 30, opacity: 0 }}
+            initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col sm:flex-row items-center gap-6">
             <Link href="/products"
-              className="relative px-10 py-5 rounded-full text-lg font-bold overflow-hidden group bg-[var(--color-text-primary)] text-[var(--color-surface-1)]">
-              <span className="relative z-10 transition-colors duration-300 group-hover:text-white">Shop Collection</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-brand-gold)] to-[var(--color-brand-green)] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 ease-out" />
+              className="relative px-12 py-5 rounded-full text-lg font-medium overflow-hidden group bg-[var(--color-text-primary)] text-[var(--color-surface-1)] hover:scale-105 transition-transform duration-500 ease-[0.16,1,0.3,1]">
+              <span className="relative z-10 transition-colors duration-500 group-hover:text-[var(--color-text-primary)]">Enter The Vault</span>
+              <div className="absolute inset-0 bg-[var(--color-surface-2)] transform scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom duration-500 ease-[0.16,1,0.3,1]" />
             </Link>
           </motion.div>
         </motion.div>
 
         {/* Scroll indicator */}
         <motion.div 
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <span className="text-[10px] uppercase tracking-widest text-[var(--color-text-muted)]">Scroll to explore</span>
-          <div className="w-px h-16 bg-gradient-to-b from-[var(--color-brand-gold)] to-transparent" />
+          initial={{ opacity: 0 }} animate={{ opacity: 0.5 }} transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+          <div className="w-px h-24 bg-gradient-to-b from-[var(--color-text-primary)] to-transparent opacity-50" />
         </motion.div>
       </section>
 
-      {/* Parallax Image / Video Break */}
-      <section className="h-[60vh] relative overflow-hidden flex items-center justify-center">
-        <motion.div 
-          initial={{ scale: 1.2 }}
-          whileInView={{ scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="absolute inset-0 bg-[#0d1512]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,168,76,0.1)_0%,transparent_60%)]" />
-          <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-        </motion.div>
-        <motion.h2 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="relative z-10 text-4xl md:text-6xl font-black text-white text-center tracking-tighter mix-blend-overlay">
-          PURITY IN COMMERCE.
-        </motion.h2>
-      </section>
-
-      {/* Trust Pillars */}
-      <section className="py-32 px-4 relative">
+      {/* Trust Pillars - Bento Grid */}
+      <section className="py-40 px-4 relative">
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,var(--color-surface-2),transparent)] opacity-10 -z-10" />
         <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-24 flex items-end justify-between">
+            <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-[var(--color-text-primary)] uppercase leading-none">
+              Absolute <br />
+              <span className="text-[var(--color-text-secondary)]">Truth.</span>
+            </h2>
+            <div className="hidden md:block text-right max-w-sm text-[var(--color-text-secondary)]">
+              No noise. No scams. Just pure transparency built on a foundation of rigorous verification.
+            </div>
+          </motion.div>
+
           <motion.div 
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: "🛡️", title: "In-House Vault", desc: "No third-party sellers. Every item is verified and stocked in our own secure vault." },
-              { icon: "📑", title: "Absolute Truth", desc: "Original or Master Copy? We tell you the absolute truth with our transparent grading." },
-              { icon: "🚫", title: "Zero Noise", desc: "No duplicate listings. One product page, select the grade you prefer and afford." }
-            ].map((pillar, i) => (
-              <motion.div key={i} variants={fadeInUp} className="group relative p-1 rounded-3xl bg-gradient-to-b from-[var(--color-surface-3)] to-transparent overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-brand-gold)] to-[var(--color-brand-green)] opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
-                <div className="relative h-full bg-[var(--color-surface-2)] p-10 rounded-[22px] flex flex-col items-start gap-6 transform transition-transform duration-500 group-hover:scale-[0.98]">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl bg-[var(--color-surface-1)] border border-[var(--color-surface-border)] shadow-[inset_0_4px_20px_rgba(0,0,0,0.5)]">
-                    {pillar.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-[var(--color-text-primary)]">{pillar.title}</h3>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed">{pillar.desc}</p>
+            className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            
+            {/* Large Pillar */}
+            <motion.div variants={fadeInUp} className="md:col-span-8 group relative p-[1px] rounded-[2rem] overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="relative h-[400px] glass-card p-12 rounded-[2rem] flex flex-col justify-between overflow-hidden">
+                <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition-transform duration-500">
+                  🛡️
                 </div>
-              </motion.div>
-            ))}
+                <div>
+                  <h3 className="text-3xl md:text-5xl font-bold text-[var(--color-text-primary)] mb-4 tracking-tight">In-House Vault</h3>
+                  <p className="text-xl text-[var(--color-text-secondary)] max-w-md">No third-party sellers. Every item is verified, authenticated, and stocked in our own secure vault before reaching you.</p>
+                </div>
+                {/* Decorative element */}
+                <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[var(--color-brand-gold)] opacity-[0.03] rounded-full blur-3xl group-hover:opacity-[0.08] transition-opacity duration-700" />
+              </div>
+            </motion.div>
+
+            {/* Side Pillars */}
+            <motion.div variants={fadeInUp} className="md:col-span-4 flex flex-col gap-6">
+              <div className="h-[calc(50%-12px)] group relative p-[1px] rounded-[2rem] overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative h-full glass-card p-8 rounded-[2rem] flex flex-col justify-end">
+                  <h3 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">Clear Quality & Price Tiers</h3>
+                  <p className="text-[var(--color-text-secondary)]">We tell you the absolute truth with our transparent grading.</p>
+                </div>
+              </div>
+              <div className="h-[calc(50%-12px)] group relative p-[1px] rounded-[2rem] overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative h-full glass-card p-8 rounded-[2rem] flex flex-col justify-end group-hover:bg-black/5 dark:group-hover:bg-white/5 transition-colors duration-500">
+                  <h3 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">Zero Noise</h3>
+                  <p className="text-[var(--color-text-secondary)]">No duplicate listings. One product page, select the grade you prefer.</p>
+                </div>
+              </div>
+            </motion.div>
+
           </motion.div>
         </div>
       </section>
 
-      {/* How Grading Works - Horizontal Scroll Layout */}
-      <section id="how-it-works" className="py-32 overflow-hidden relative border-y border-[var(--color-surface-border)] bg-[var(--color-surface-2)]">
-        <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--color-brand-green)] opacity-[0.03] blur-[120px] pointer-events-none" />
+      {/* Parallax Image / Video Break */}
+      <section ref={parallaxRef} className="h-[80vh] relative overflow-hidden flex items-center justify-center bg-[var(--color-surface-2)]">
+        <motion.div 
+          style={{ y: parallaxY }}
+          className="absolute inset-0 w-full h-[140%] -top-[20%]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.05)_0%,transparent_70%)]" />
+          <div className="absolute inset-0 opacity-[0.14] dark:opacity-[0.15] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+        </motion.div>
+        <motion.h2 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+          className="relative z-10 text-[5rem] md:text-[10rem] font-bold text-[var(--color-text-primary)] text-center tracking-tighter opacity-30 leading-none">
+          PURITY IN <br /> COMMERCE
+        </motion.h2>
+      </section>
+
+      {/* How Grading Works - Aesthetic Cards */}
+      <section id="how-it-works" className="py-40 overflow-hidden relative border-y border-[var(--color-surface-border)] bg-[var(--color-surface-1)]">
+        <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--color-brand-gold)] opacity-[0.02] blur-[150px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4">
           <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
-            className="mb-20">
-            <h2 className="text-5xl md:text-7xl font-black text-[var(--color-text-primary)] mb-6 tracking-tighter">
-              The <span className="gradient-text-gold">Grading</span> Matrix.
+            className="mb-24">
+            <h2 className="text-5xl md:text-8xl font-bold text-[var(--color-text-primary)] mb-6 tracking-tight uppercase">
+              The Matrix.
             </h2>
-            <p className="text-xl text-[var(--color-text-secondary)] max-w-2xl">
-              We eliminated the chaos. We show you exactly what you're buying. Choose your tier.
+            <p className="text-2xl text-[var(--color-text-secondary)] max-w-2xl font-light">
+              We eliminated the chaos. Choose your tier with complete transparency.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {[
-              { grade: "A", title: "Authentic Original", subtitle: "100% Genuine product", color: "var(--color-brand-gold)", border: "rgba(201,168,76,0.3)", bg: "rgba(201,168,76,0.05)", items: ["Verified through official channels", "Includes original box and warranty", "Uncompromised premium quality"] },
-              { grade: "B", title: "Master Copy", subtitle: "Premium 1:1 replica", color: "var(--color-brand-silver)", border: "rgba(158,163,174,0.3)", bg: "rgba(158,163,174,0.05)", items: ["Identical aesthetics & materials", "Highly durable and reliable", "The smartest value for money"] },
-              { grade: "C", title: "Standard Quality", subtitle: "Budget-friendly alternatives", color: "var(--color-brand-bronze)", border: "rgba(160,82,45,0.3)", bg: "rgba(160,82,45,0.05)", items: ["Inspired designs & standard materials", "Ideal for casual daily use", "Most accessible price points"] },
+              { grade: "A", title: "Pristine Original", subtitle: "100% Genuine product", class: "grade-a", items: ["Verified through official channels", "Includes original packaging & warranty", "Uncompromised premium quality"] },
+              { grade: "B", title: "Premium Equivalent", subtitle: "Slight quality drop for savings", class: "grade-b", items: ["Near-identical aesthetics & materials", "Highly durable & reliable", "Perfect balance of price and quality"] },
+              { grade: "C", title: "Standard Equivalent", subtitle: "Noticeable drop, budget-friendly", class: "grade-c", items: ["Inspired designs & standard materials", "Ideal for casual daily use", "Most accessible price points"] },
             ].map((tier, idx) => (
               <motion.div 
                 key={tier.grade}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: idx * 0.2 }}
+                transition={{ duration: 0.8, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
                 viewport={{ once: true, margin: "-50px" }}
-                className="relative p-10 rounded-[2rem] overflow-hidden glass-card group hover:border-transparent transition-colors duration-500"
-                style={{ borderColor: tier.border, background: tier.bg }}>
+                className={`relative p-10 rounded-[2rem] overflow-hidden glass-card group transition-all duration-700 hover:-translate-y-2 ${tier.class}`}
+                style={{ 
+                  borderColor: 'var(--grade-border)', 
+                  background: 'var(--grade-bg)' 
+                }}>
                 
-                <div className="absolute -bottom-10 -right-10 text-[16rem] font-black opacity-5 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none" style={{ color: tier.color }}>{tier.grade}</div>
+                <div className="absolute -bottom-10 -right-10 text-[18rem] font-black opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700 pointer-events-none" style={{ color: 'var(--grade-color)' }}>{tier.grade}</div>
                 
-                <div className="flex items-center gap-6 mb-8 relative z-10">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-black border"
-                    style={{ color: tier.color, borderColor: tier.border, background: 'var(--color-surface-1)' }}>
+                <div className="flex flex-col gap-6 mb-12 relative z-10">
+                  <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl font-bold border glass-card"
+                    style={{ color: 'var(--grade-color)', borderColor: 'var(--grade-border)' }}>
                     {tier.grade}
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold" style={{ color: tier.color }}>{tier.title}</h3>
-                    <p className="text-sm text-[var(--color-text-muted)]">{tier.subtitle}</p>
+                    <h3 className="text-3xl font-bold mb-1 text-[var(--color-text-primary)]">{tier.title}</h3>
+                    <p className="text-lg opacity-80" style={{ color: 'var(--grade-color)' }}>{tier.subtitle}</p>
                   </div>
                 </div>
                 
-                <ul className="space-y-5 text-lg text-[var(--color-text-secondary)] relative z-10">
+                <ul className="space-y-6 text-lg text-[var(--color-text-secondary)] relative z-10">
                   {tier.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-4">
-                      <span className="mt-1" style={{ color: tier.color }}>✦</span> 
+                      <span className="mt-1" style={{ color: 'var(--grade-color)' }}>✦</span> 
                       <span>{item}</span>
                     </li>
                   ))}
@@ -214,25 +302,27 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-32 px-4 relative">
+      <section className="py-40 px-4 relative bg-[var(--color-surface-2)]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
             <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}>
-              <h2 className="text-4xl md:text-6xl font-bold text-[var(--color-text-primary)] tracking-tighter mb-4">
-                Curated <span className="gradient-text-green">Artifacts</span>.
+              <h2 className="text-5xl md:text-7xl font-bold text-[var(--color-text-primary)] tracking-tight mb-4 uppercase">
+                Artifacts.
               </h2>
-              <p className="text-xl text-[var(--color-text-secondary)]">The most sought-after goods, verified.</p>
+              <p className="text-xl text-[var(--color-text-secondary)] font-light">The most sought-after goods, verified.</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}>
-              <Link href="/products" className="inline-flex items-center gap-2 text-lg font-semibold text-[var(--color-brand-gold)] hover:text-white transition-colors group">
+              <Link href="/products" className="inline-flex items-center gap-3 text-lg font-medium text-[var(--color-text-primary)] hover:text-[var(--color-brand-gold)] transition-colors group">
                 Explore Vault 
-                <span className="transform transition-transform group-hover:translate-x-2">→</span>
+                <span className="w-10 h-px bg-[var(--color-text-primary)] group-hover:bg-[var(--color-brand-gold)] transition-colors" />
               </Link>
             </motion.div>
           </div>
@@ -242,7 +332,7 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredProducts.map(product => (
               <motion.div key={product.id} variants={fadeInUp}>
                 <ProductCard product={product} />
@@ -253,22 +343,20 @@ export default function Home() {
       </section>
 
       {/* Epic Footer CTA */}
-      <section className="py-40 px-4 relative overflow-hidden bg-black flex items-center justify-center">
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--color-surface-1),#000)]" />
-        <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      <section className="h-screen py-40 px-4 relative overflow-hidden bg-[var(--color-surface-1)] flex items-center justify-center border-y border-[var(--color-surface-border)]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-surface-2)_0%,transparent_70%)] opacity-30" />
         
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1, ease: 'easeOut' }}
-          viewport={{ once: true }}
-          className="relative z-10 text-center">
-          <h2 className="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter">
-            ENTER THE <span className="gradient-text-gold">VAULT.</span>
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="relative z-10 text-center flex flex-col items-center">
+          <h2 className="text-[4rem] md:text-[9rem] font-bold text-[var(--color-text-primary)] mb-12 tracking-[-0.04em] uppercase leading-none">
+            ENTER THE <br /> <span className="opacity-40">VAULT.</span>
           </h2>
           <Link href="/products"
-            className="inline-flex items-center justify-center px-12 py-5 rounded-full text-xl font-bold transition-all duration-500 hover:scale-110 shadow-[0_0_60px_rgba(201,168,76,0.2)] hover:shadow-[0_0_100px_rgba(201,168,76,0.4)]"
-            style={{ background: 'linear-gradient(135deg, var(--color-brand-gold), var(--color-brand-gold-dark))', color: '#000' }}>
+            className="px-14 py-6 rounded-full text-xl font-medium bg-[var(--color-text-primary)] text-[var(--color-surface-1)] hover:scale-105 transition-transform duration-500 ease-[0.16,1,0.3,1] shadow-[0_0_40px_rgba(0,0,0,0.1)] hover:shadow-[0_0_60px_rgba(0,0,0,0.2)] dark:shadow-[0_0_40px_rgba(255,255,255,0.1)] dark:hover:shadow-[0_0_60px_rgba(255,255,255,0.2)]">
             Begin Your Journey
           </Link>
         </motion.div>

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import CartDrawer from "@/components/CartDrawer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -32,13 +34,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-surface-1 text-text-primary antialiased selection:bg-[var(--color-brand-green)] selection:text-white">
-        <SmoothScroll>
-          <CustomCursor />
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </SmoothScroll>
+      <body className="min-h-full flex flex-col bg-surface-1 text-text-primary antialiased selection:bg-[var(--color-brand-gold)] selection:text-[var(--color-text-invert)]">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <SmoothScroll>
+            <CustomCursor />
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <CartDrawer />
+          </SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );

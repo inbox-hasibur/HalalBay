@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer style={{ background: 'var(--color-surface-2)', borderTop: '1px solid var(--color-surface-border)' }}>
       {/* Mission strip */}
-      <div className="py-10 px-4" style={{ background: 'linear-gradient(135deg, rgba(10,110,78,0.12), rgba(201,168,76,0.06))' }}>
+      <div className="py-10 px-4 border-b border-[var(--color-surface-border)]">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text-primary)' }}>
             We don&apos;t just sell products.
@@ -25,8 +25,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm"
-                style={{ background: 'linear-gradient(135deg, var(--color-brand-green), var(--color-brand-green-light))', color: '#fff' }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                 HB
               </div>
               <span className="font-bold text-lg">
@@ -99,8 +98,8 @@ export default function Footer() {
             © 2026 HalalBay. All rights reserved. Built for honest commerce in Bangladesh.
           </p>
           <div className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs"
-            style={{ background: 'rgba(10,110,78,0.1)', border: '1px solid rgba(10,110,78,0.2)', color: 'var(--color-brand-green-light)' }}>
-            <span>🌱</span>
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--color-text-primary)' }}>
+            <span className="opacity-80">✦</span>
             <span>Halal • Honest • Transparent</span>
           </div>
         </div>

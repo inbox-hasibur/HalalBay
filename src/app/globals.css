@@ -2,30 +2,54 @@
 
 @theme inline {
   /* Brand Colors */
-  --color-brand-green: #0a6e4e;
-  --color-brand-green-light: #0d8f65;
-  --color-brand-green-dark: #064d36;
-  --color-brand-gold: #c9a84c;
-  --color-brand-gold-light: #e2bf6a;
-  --color-brand-gold-dark: #a8873c;
-  --color-brand-silver: #9ea3ae;
-  --color-brand-bronze: #a0522d;
+  --color-brand-green: #00ff9d;
+  --color-brand-green-light: #33ffb1;
+  --color-brand-green-dark: #00cc7e; /* Core Brand Colors (Stay constant) */
+  --color-brand-gold: #D4AF37;
+  --color-brand-gold-light: #F3E5AB;
+  --color-brand-gold-dark: #AA8C2C;
+  --color-brand-silver: #C0C0C0;
+  --color-brand-bronze: #CD7F32;
 
-  /* Surface / Dark BG */
-  --color-surface-1: #0b0f0e;
-  --color-surface-2: #111917;
-  --color-surface-3: #182821;
-  --color-surface-4: #1f3329;
-  --color-surface-card: #141e1b;
-  --color-surface-border: #1e3028;
+  /* FLUENT DESIGN LIGHT MODE DEFAULT */
+  --color-surface-1: #f3f3f3; /* Airy light gray */
+  --color-surface-2: #ffffff; /* Pure white cards */
+  --color-surface-3: #f9f9f9;
+  --color-surface-4: #e5e5e5;
+  
+  /* Acrylic Material Tokens */
+  --color-surface-card: rgba(255, 255, 255, 0.7);
+  --color-surface-border: rgba(0, 0, 0, 0.05);
+  --color-surface-blur: blur(20px);
+  --color-shadow-fluent: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
 
-  /* Text */
-  --color-text-primary: #f0f4f2;
-  --color-text-secondary: #8fa89c;
-  --color-text-muted: #5a7268;
+  /* Text - Light Mode */
+  --color-text-primary: #111111;
+  --color-text-secondary: #4b4b4b;
+  --color-text-muted: #737373;
+  --color-text-invert: #ffffff;
 
   /* Fonts */
   --font-sans: var(--font-inter);
+}
+
+.dark {
+  /* AWWWARDS DARK MODE */
+  --color-surface-1: #020202;
+  --color-surface-2: #080808;
+  --color-surface-3: #111111;
+  --color-surface-4: #1a1a1a;
+  
+  --color-surface-card: rgba(14, 14, 14, 0.45);
+  --color-surface-border: rgba(255, 255, 255, 0.08);
+  --color-surface-blur: blur(12px);
+  --color-shadow-fluent: 0 4px 40px rgba(0, 0, 0, 0.5);
+
+  /* Text - Dark Mode */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a3a3a3;
+  --color-text-muted: #6b6b6b;
+  --color-text-invert: #000000;
 }
 
 html, body {
@@ -33,6 +57,32 @@ html, body {
   color: var(--color-text-primary);
   font-family: var(--font-inter), system-ui, sans-serif;
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light mode dynamic gradients */
+:root body {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.06) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(100, 149, 237, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(230, 220, 252, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(212, 175, 55, 0.04) 0px, transparent 50%);
+  background-size: 200% 200%;
+  animation: gradientShift 20s ease infinite;
+}
+
+/* Dark mode dynamic gradients */
+.dark body {
+  background: linear-gradient(
+    -45deg,
+    #020202,
+    #042f2e, 
+    #020617,
+    #064e3b,
+    #020202
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
 }
 
 /* Custom scrollbar */
@@ -62,56 +112,93 @@ html, body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.3); }
-  50% { box-shadow: 0 0 0 8px rgba(201, 168, 76, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.3); }
+  50% { box-shadow: 0 0 0 12px rgba(212, 175, 55, 0); }
+}
+
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out both;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .animate-pulse-glow {
-  animation: pulse-glow 2s infinite;
+  animation: pulse-glow 3s infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Premium noise overlay utility */
+.bg-noise {
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+  opacity: 0.2;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  mix-blend-mode: overlay;
+}
+
+.dark .bg-noise {
+  opacity: 0.03;
+  mix-blend-mode: normal;
 }
 
 /* Grade colors */
 .grade-a {
-  --grade-color: #c9a84c;
-  --grade-bg: rgba(201, 168, 76, 0.12);
-  --grade-border: rgba(201, 168, 76, 0.35);
+  --grade-color: #D4AF37;
+  --grade-bg: rgba(212, 175, 55, 0.05);
+  --grade-border: rgba(212, 175, 55, 0.2);
 }
 .grade-b {
-  --grade-color: #9ea3ae;
-  --grade-bg: rgba(158, 163, 174, 0.12);
-  --grade-border: rgba(158, 163, 174, 0.35);
+  --grade-color: #C0C0C0;
+  --grade-bg: rgba(192, 192, 192, 0.05);
+  --grade-border: rgba(192, 192, 192, 0.2);
 }
 .grade-c {
-  --grade-color: #a0522d;
-  --grade-bg: rgba(160, 82, 45, 0.12);
-  --grade-border: rgba(160, 82, 45, 0.35);
+  --grade-color: #CD7F32;
+  --grade-bg: rgba(205, 127, 50, 0.05);
+  --grade-border: rgba(205, 127, 50, 0.2);
 }
 
 /* Gradient text */
 .gradient-text-gold {
-  background: linear-gradient(135deg, #c9a84c, #e2bf6a, #c9a84c);
+  background: linear-gradient(135deg, #F3E5AB, #D4AF37, #AA8C2C);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-green {
-  background: linear-gradient(135deg, #0a6e4e, #0d8f65);
+  background: linear-gradient(135deg, #33ffb1, #00ff9d);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glass card */
+/* Glass card & Bento Box */
 .glass-card {
-  background: rgba(20, 30, 27, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 48, 40, 0.8);
+  background: var(--color-surface-card);
+  backdrop-filter: var(--color-surface-blur);
+  -webkit-backdrop-filter: var(--color-surface-blur);
+  border: 1px solid var(--color-surface-border);
+  box-shadow: var(--color-shadow-fluent);
 }
 
 /* Hover shimmer effect */

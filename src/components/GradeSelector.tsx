@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from "react";
-import { Grade } from "@/lib/mockData";
 import { motion, AnimatePresence } from "framer-motion";
+import { Grade, products } from "@/lib/mockData";
+import { useCartStore } from "@/store/useCartStore";
 
 function formatPrice(n: number) {
   return "৳" + n.toLocaleString("en-BD");
@@ -12,16 +13,16 @@ const GRADE_STYLES: Record<string, {
   color: string; bg: string; activeBg: string; border: string; activeBorder: string; label: string; ring: string;
 }> = {
   A: {
-    color: "#c9a84c", bg: "rgba(201,168,76,0.06)", activeBg: "rgba(201,168,76,0.14)",
-    border: "rgba(201,168,76,0.2)", activeBorder: "#c9a84c", label: "Grade A", ring: "rgba(201,168,76,0.3)"
+    color: "#D4AF37", bg: "rgba(212,175,55,0.03)", activeBg: "rgba(212,175,55,0.08)",
+    border: "rgba(212,175,55,0.15)", activeBorder: "#D4AF37", label: "Grade A", ring: "rgba(212,175,55,0.2)"
   },
   B: {
-    color: "#9ea3ae", bg: "rgba(158,163,174,0.06)", activeBg: "rgba(158,163,174,0.14)",
-    border: "rgba(158,163,174,0.2)", activeBorder: "#9ea3ae", label: "Grade B", ring: "rgba(158,163,174,0.3)"
+    color: "#C0C0C0", bg: "rgba(192,192,192,0.03)", activeBg: "rgba(192,192,192,0.08)",
+    border: "rgba(192,192,192,0.15)", activeBorder: "#C0C0C0", label: "Grade B", ring: "rgba(192,192,192,0.2)"
   },
   C: {
-    color: "#a0522d", bg: "rgba(160,82,45,0.06)", activeBg: "rgba(160,82,45,0.14)",
-    border: "rgba(160,82,45,0.2)", activeBorder: "#a0522d", label: "Grade C", ring: "rgba(160,82,45,0.3)"
+    color: "#CD7F32", bg: "rgba(205,127,50,0.03)", activeBg: "rgba(205,127,50,0.08)",
+    border: "rgba(205,127,50,0.15)", activeBorder: "#CD7F32", label: "Grade C", ring: "rgba(205,127,50,0.2)"
   },
 };
 
@@ -33,6 +34,7 @@ interface GradeSelectorProps {
 export default function GradeSelector({ grades, onGradeChange }: GradeSelectorProps) {
   const defaultGrade = grades.find(g => g.inStock) || grades[0];
   const [selected, setSelected] = useState<Grade>(defaultGrade);
+  const { addItem } = useCartStore();
 
   const handleSelect = (grade: Grade) => {
     if (!grade.inStock) return;
@@ -40,7 +42,17 @@ export default function GradeSelector({ grades, onGradeChange }: GradeSelectorPr
     onGradeChange?.(grade);
   };
 
-  const style = GRADE_STYLES[selected.label] || GRADE_STYLES["C"];
+  const handleAcquire = () => {
+    // Note: Since we only have grades and product id logic relies on mockData, 
+    // we'll fetch the parent product via mockData or pass it down. 
+    // Let's pass the product down to GradeSelector if we want, or mock a product.
+    // For now we'll mock the product parameter since the cart needs a Product object.
+    const mockProduct = products.find(p => p.grades.some(g => g.label === selected.label)) || products[0];
+    addItem(mockProduct, selected);
+    // don't toggle cart manually if addItem already opens it, which it does.
+  };
+
+  const style = GRADE_STYLES[selected.label] || GRADE_STYLES["A"];
 
   return (
     <div className="flex flex-col gap-6">
@@ -194,21 +206,39 @@ export default function GradeSelector({ grades, onGradeChange }: GradeSelectorPr
         })}
       </div>
 
-      {/* Sticky Selected Bottom Summary */}
+      {/* Sticky Selected Bottom Summary & CTA */}
       <motion.div 
         layout
-        className="p-5 rounded-2xl flex items-center justify-between border shadow-2xl backdrop-blur-md"
-        style={{ 
-          background: 'rgba(20, 30, 27, 0.7)', 
-          borderColor: style.border,
-          boxShadow: `0 10px 40px ${style.ring}`
-        }}>
-        <div className="flex flex-col">
-          <span className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--color-text-muted)' }}>Currently Selected</span>
-          <span className="font-bold text-lg" style={{ color: style.color }}>Grade {selected.label} — {selected.name}</span>
+        className="mt-4 flex flex-col gap-4 sticky bottom-4 z-40"
+      >
+        <div className="p-5 rounded-2xl flex items-center justify-between border shadow-2xl backdrop-blur-md"
+          style={{ 
+            background: 'var(--color-surface-card)', 
+            borderColor: style.border,
+            boxShadow: `0 10px 40px ${style.ring}`
+          }}>
+          <div className="flex flex-col">
+            <span className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--color-text-muted)' }}>Currently Selected</span>
+            <span className="font-bold text-lg" style={{ color: style.color }}>Grade {selected.label} — {selected.name}</span>
+          </div>
+          <div className="font-black text-2xl tracking-tighter" style={{ color: 'var(--color-text-primary)' }}>
+            {formatPrice(selected.price)}
+          </div>
         </div>
-        <div className="font-black text-2xl tracking-tighter" style={{ color: 'var(--color-text-primary)' }}>
-          {formatPrice(selected.price)}
+
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <button 
+            onClick={handleAcquire}
+            className="flex-1 w-full py-5 rounded-2xl text-xl font-bold uppercase tracking-widest transition-all duration-300 shadow-[0_10px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(255,255,255,0.1)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.15)] transform hover:-translate-y-1 hover:scale-[1.02] relative overflow-hidden group/cta bg-[var(--color-text-primary)] text-[var(--color-text-invert)]"
+          >
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent)] dark:bg-[linear-gradient(90deg,transparent,rgba(0,0,0,0.15),transparent)] w-[200%] animate-sweep opacity-0 group-hover/cta:opacity-100 transition-opacity duration-300" />
+            <span className="relative z-10">Acquire Now</span>
+          </button>
+          <button className="sm:w-20 w-full py-5 rounded-2xl flex items-center justify-center shrink-0 border-2 glass-card text-[var(--color-text-primary)] hover:border-[var(--color-brand-gold)] hover:bg-[rgba(201,168,76,0.1)] hover:text-[var(--color-brand-gold)] transition-colors duration-300">
+            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
         </div>
       </motion.div>
     </div>
