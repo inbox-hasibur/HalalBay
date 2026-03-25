@@ -57,21 +57,26 @@ export default function TrustToken() {
 
   return (
     <>
-      <Environment preset={isDark ? "city" : "studio"} />
+      <Environment preset={isDark ? "city" : "sunset"} />
+      <ambientLight intensity={isDark ? 0.5 : 0.25} color={isDark ? "#ffffff" : "#f8fbff"} />
+      <directionalLight position={[5, 8, 5]} intensity={isDark ? 0.6 : 0.75} color={isDark ? "#a8c4ff" : "#ffd580"} />
+
       <Float speed={2} rotationIntensity={0.5} floatIntensity={1.5} floatingRange={[-0.2, 0.2]}>
         
         {/* Animated exterior sweeping lights (Fluent Abstract Multi-Color) */}
-        <pointLight ref={light1} color="#00e5ff" intensity={60} distance={10} />
-        <pointLight ref={light2} color="#b026ff" intensity={60} distance={10} />
-        <pointLight ref={light3} color="#ff3366" intensity={60} distance={10} />
+        <pointLight ref={light1} color={isDark ? "#00e5ff" : "#4f46e5"} intensity={60} distance={10} />
+        <pointLight ref={light2} color={isDark ? "#b026ff" : "#ea580c"} intensity={60} distance={10} />
+        <pointLight ref={light3} color={isDark ? "#ff3366" : "#16a34a"} intensity={60} distance={10} />
 
         {/* Matte Opaque Material */}
         <mesh ref={meshRef} scale={1.5}>
           <torusKnotGeometry args={[1, 0.35, 128, 32]} />
           <meshStandardMaterial 
-            color={isDark ? "#e5e5e5" : "#000000"} 
-            roughness={0.8}
-            metalness={0.4}
+            color={isDark ? "#f5f6f7" : "#1e3a8a"} 
+            roughness={0.5}
+            metalness={0.7}
+            emissive={isDark ? "#2a82ff" : "#7f1d1d"}
+            emissiveIntensity={isDark ? 0.1 : 0.25}
           />
         </mesh>
 
@@ -80,9 +85,11 @@ export default function TrustToken() {
           <mesh key={key} position={position}>
             <sphereGeometry args={[0.08, 16, 16]} />
             <meshStandardMaterial 
-              color={isDark ? "#00e5ff" : "#000000"}
-              emissive={isDark ? "#b026ff" : "#ff3366"}
-              emissiveIntensity={isDark ? 2 : 1}
+              color={isDark ? "#60a5fa" : "#0f172a"}
+              emissive={isDark ? "#34d399" : "#facc15"}
+              emissiveIntensity={isDark ? 2 : 2.5}
+              roughness={0.2}
+              metalness={0.8}
             />
           </mesh>
         ))}

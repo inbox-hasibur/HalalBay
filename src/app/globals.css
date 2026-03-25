@@ -71,6 +71,13 @@ html, body {
   animation: gradientShift 20s ease infinite;
 }
 
+/* Light mode dynamic gradients */
+.light body {
+  background: linear-gradient(130deg, #f8fafc 0%, #ecfeff 35%, #f5f3ff 60%, #fef3c7 100%);
+  background-size: 250% 250%;
+  animation: gradientShift 20s ease infinite;
+}
+
 /* Dark mode dynamic gradients */
 .dark body {
   background: linear-gradient(

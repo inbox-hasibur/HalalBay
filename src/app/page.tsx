@@ -7,13 +7,25 @@ import { Canvas } from "@react-three/fiber";
 import TrustToken from "@/components/TrustToken";
 import { Environment } from "@react-three/drei";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function Home() {
   const featuredProducts = products.slice(0, 4);
+  const [gradeFilter, setGradeFilter] = useState<'all'|'A'|'B'|'C'>('all');
+  const [sortBy, setSortBy] = useState<'rating'|'price'>('rating');
   const containerRef = useRef<HTMLDivElement>(null);
   const parallaxRef = useRef<HTMLDivElement>(null);
-  
+
+  const displayedProducts = featuredProducts
+    .filter(p => gradeFilter === 'all' || p.grades.some(g => g.label === gradeFilter))
+    .sort((a, b) => {
+      if (sortBy === 'price') {
+        const aMin = Math.min(...a.grades.map(g => g.price));
+        const bMin = Math.min(...b.grades.map(g => g.price));
+        return aMin - bMin;
+      }
+      return b.rating - a.rating;
+    });
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
@@ -165,12 +177,12 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-24 flex items-end justify-between">
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-[var(--color-text-primary)] uppercase leading-none">
+            className="mb-16 sm:mb-20 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-[var(--color-text-primary)] uppercase leading-none">
               Absolute <br />
               <span className="text-[var(--color-text-secondary)]">Truth.</span>
             </h2>
-            <div className="hidden md:block text-right max-w-sm text-[var(--color-text-secondary)]">
+            <div className="text-right max-w-full sm:max-w-sm text-sm sm:text-base text-[var(--color-text-secondary)]">
               No noise. No scams. Just pure transparency built on a foundation of rigorous verification.
             </div>
           </motion.div>
@@ -305,27 +317,52 @@ export default function Home() {
       {/* Featured Products */}
       <section className="py-40 px-4 relative bg-[var(--color-surface-2)]/40 backdrop-blur-[60px] border-y border-[var(--color-surface-border)]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-8">
             <motion.div 
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}>
-              <h2 className="text-5xl md:text-7xl font-bold text-[var(--color-text-primary)] tracking-tight mb-4 uppercase">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[var(--color-text-primary)] tracking-tight mb-2 uppercase">
                 Artifacts.
               </h2>
-              <p className="text-xl text-[var(--color-text-secondary)] font-light">The most sought-after goods, verified.</p>
+              <p className="text-base sm:text-lg text-[var(--color-text-secondary)] font-light">The most sought-after goods, verified and now filterable.</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}>
-              <Link href="/products" className="inline-flex items-center gap-3 text-lg font-medium text-[var(--color-text-primary)] hover:text-[var(--color-brand-gold)] transition-colors group">
+              <Link href="/products" className="inline-flex items-center gap-3 text-sm sm:text-lg font-medium text-[var(--color-text-primary)] hover:text-[var(--color-brand-gold)] transition-colors group">
                 Explore Vault 
                 <span className="w-10 h-px bg-[var(--color-text-primary)] group-hover:bg-[var(--color-brand-gold)] transition-colors" />
               </Link>
             </motion.div>
+          </div>
+
+          <div className="flex flex-wrap justify-between gap-2 md:gap-4 mb-6">
+            <div className="flex flex-wrap gap-2">
+              {['all', 'A', 'B', 'C'].map(level => (
+                <button
+                  key={level}
+                  onClick={() => setGradeFilter(level as 'all'|'A'|'B'|'C')}
+                  className={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all ${gradeFilter === level ? 'bg-[var(--color-brand-gold)] text-black' : 'bg-[var(--color-surface-3)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-2)]'}`}>
+                  {level === 'all' ? 'All Grades' : `Grade ${level}`}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs sm:text-sm text-[var(--color-text-secondary)]">Sort by</span>
+              {['rating', 'price'].map(key => (
+                <button
+                  key={key}
+                  onClick={() => setSortBy(key as 'rating'|'price')}
+                  className={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all ${sortBy === key ? 'bg-[var(--color-brand-gold)] text-black' : 'bg-[var(--color-surface-3)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-2)]'}`}>
+                  {key === 'rating' ? 'Rating' : 'Price'}
+                </button>
+              ))}
+            </div>
           </div>
 
           <motion.div 
@@ -334,7 +371,7 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.map(product => (
+            {displayedProducts.map(product => (
               <motion.div key={product.id} variants={fadeInUp}>
                 <ProductCard product={product} />
               </motion.div>

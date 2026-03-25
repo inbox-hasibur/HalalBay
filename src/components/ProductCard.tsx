@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Product } from "@/lib/mockData";
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useCartStore } from "@/store/useCartStore";
 
 function formatPrice(n: number) {
   return "৳" + n.toLocaleString("en-BD");
@@ -19,7 +20,8 @@ export default function ProductCard({ product }: { product: Product }) {
   const lowestGrade = product.grades.find(g => g.inStock) || product.grades[0];
   const productGrades = product.grades || [];
   const topGrade = productGrades[0]?.label || "C";
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const defaultGrade = productGrades.find(g => g.label === topGrade) || productGrades[0];
+  const addItem = useCartStore(state => state.addItem);
   const style = GRADE_STYLES[topGrade] || GRADE_STYLES["C"];
   
   const ref = useRef<HTMLDivElement>(null);
@@ -153,13 +155,28 @@ export default function ProductCard({ product }: { product: Product }) {
             </div>
 
             {/* CTA */}
-            <button
-              className="w-full py-3.5 rounded-xl text-sm font-bold mt-2 transition-all duration-300 relative overflow-hidden group/btn border border-transparent hover:border-[var(--color-brand-green-light)]"
-              style={{ background: 'var(--color-surface-3)', color: 'var(--color-text-primary)' }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-brand-green)] to-[var(--color-brand-green-light)] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-300 ease-out z-0" />
-              <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">Select Grade & Buy</span>
-            </button>
+            <div className="flex flex-col gap-2 mt-2">
+              <button
+                className="w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-300 relative overflow-hidden group/btn border border-transparent hover:border-[var(--color-brand-green-light)]"
+                style={{ background: 'var(--color-surface-3)', color: 'var(--color-text-primary)' }}
+                onClick={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (defaultGrade) addItem(product, defaultGrade);
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-brand-green)] to-[var(--color-brand-green-light)] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-300 ease-out z-0" />
+                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">Quick Add Grade {defaultGrade?.label ?? 'A'}</span>
+              </button>
+
+              <button
+                className="w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-300 relative overflow-hidden group/btn border border-transparent hover:border-[var(--color-brand-green-light)]"
+                style={{ background: 'var(--color-surface-3)', color: 'var(--color-text-primary)' }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-brand-green)] to-[var(--color-brand-green-light)] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-300 ease-out z-0" />
+                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-white">Select Grade & Buy</span>
+              </button>
+            </div>
           </div>
         </article>
       </motion.div>

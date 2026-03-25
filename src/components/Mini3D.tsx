@@ -45,12 +45,14 @@ export default function Mini3D({ type }: Mini3DProps) {
 
   return (
     <>
+      <ambientLight intensity={isDark ? 0.35 : 0.5} color={isDark ? "#cbd5e1" : "#e0f2fe"} />
+      <directionalLight position={[2, 3, 2]} intensity={isDark ? 0.5 : 0.6} color={isDark ? "#93c5fd" : "#fb923c"} />
       <Float speed={3} rotationIntensity={1} floatIntensity={2}>
         
         {/* Animated exterior sweeping lights (Fluent Abstract Multi-Color) */}
-        <pointLight ref={light1} color="#00e5ff" intensity={40} distance={8} />
-        <pointLight ref={light2} color="#b026ff" intensity={40} distance={8} />
-        <pointLight ref={light3} color="#ff3366" intensity={40} distance={8} />
+        <pointLight ref={light1} color={isDark ? "#0ea5e9" : "#06b6d4"} intensity={40} distance={8} />
+        <pointLight ref={light2} color={isDark ? "#a78bfa" : "#f472b6"} intensity={40} distance={8} />
+        <pointLight ref={light3} color={isDark ? "#fb7185" : "#fde68a"} intensity={40} distance={8} />
 
         <mesh ref={meshRef}>
           {type === 'box' ? (
@@ -59,9 +61,11 @@ export default function Mini3D({ type }: Mini3DProps) {
             <Sphere args={[0.9, 32, 32]} />
           )}
           <meshStandardMaterial 
-            color={isDark ? "#e5e5e5" : "#000000"} 
-            roughness={0.8}
-            metalness={0.4}
+            color={isDark ? "#dbeafe" : "#1e3a8a"} 
+            roughness={isDark ? 0.35 : 0.25}
+            metalness={isDark ? 0.7 : 0.9}
+            emissive={isDark ? "#38bdf8" : "#fbbf24"}
+            emissiveIntensity={isDark ? 0.2 : 0.3}
           />
         </mesh>
       </Float>

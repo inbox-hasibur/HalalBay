@@ -158,7 +158,7 @@ export default function Navbar() {
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                 {mounted && totalItems > 0 && (
-                  <span className=" абсолюt absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-brand-gold)] text-[10px] font-bold text-black border-[1.5px] border-[var(--color-surface-2)]">
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-brand-gold)] text-[10px] font-bold text-black border-[1.5px] border-[var(--color-surface-2)]">
                     {totalItems}
                   </span>
                 )}
