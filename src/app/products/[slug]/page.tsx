@@ -102,7 +102,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {/* Core Grading UI */}
             <div className="mb-4 relative z-20">
               <div id="grade-explainer" className="scroll-mt-32" />
-              <GradeSelector grades={product.grades} />
+              <GradeSelector product={product} grades={product.grades} />
             </div>
           </div>
         </div>

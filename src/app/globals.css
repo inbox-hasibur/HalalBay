@@ -1,32 +1,31 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Brand Colors */
-  --color-brand-green: #00ff9d;
-  --color-brand-green-light: #33ffb1;
-  --color-brand-green-dark: #00cc7e; /* Core Brand Colors (Stay constant) */
+  /* Core Brand Colors (constant across themes) */
   --color-brand-gold: #D4AF37;
   --color-brand-gold-light: #F3E5AB;
   --color-brand-gold-dark: #AA8C2C;
+  --color-brand-orange: #f97316;
+  --color-brand-amber: #f59e0b;
   --color-brand-silver: #C0C0C0;
   --color-brand-bronze: #CD7F32;
 
-  /* FLUENT DESIGN LIGHT MODE DEFAULT */
-  --color-surface-1: #f3f3f3; /* Airy light gray */
-  --color-surface-2: #ffffff; /* Pure white cards */
-  --color-surface-3: #f9f9f9;
-  --color-surface-4: #e5e5e5;
-  
-  /* Acrylic Material Tokens */
-  --color-surface-card: rgba(255, 255, 255, 0.7);
-  --color-surface-border: rgba(0, 0, 0, 0.05);
-  --color-surface-blur: blur(20px);
-  --color-shadow-fluent: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  /* FLUENT DESIGN LIGHT MODE (default) */
+  --color-surface-1: #faf8f3;        /* Warm parchment base */
+  --color-surface-2: #ffffff;        /* Pure white cards */
+  --color-surface-3: #f5f0e8;        /* Warm tinted input bg */
+  --color-surface-4: #ede8dc;        /* Subtle warm divider */
 
-  /* Text - Light Mode */
-  --color-text-primary: #111111;
-  --color-text-secondary: #4b4b4b;
-  --color-text-muted: #737373;
+  /* Acrylic Material */
+  --color-surface-card: rgba(255, 255, 255, 0.75);
+  --color-surface-border: rgba(180, 140, 60, 0.12);
+  --color-surface-blur: blur(20px);
+  --color-shadow-fluent: 0 4px 24px rgba(180, 140, 60, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  /* Text — Light Mode */
+  --color-text-primary: #1a1208;
+  --color-text-secondary: #5c4a28;
+  --color-text-muted: #8a7560;
   --color-text-invert: #ffffff;
 
   /* Fonts */
@@ -39,13 +38,13 @@
   --color-surface-2: #080808;
   --color-surface-3: #111111;
   --color-surface-4: #1a1a1a;
-  
+
   --color-surface-card: rgba(14, 14, 14, 0.45);
   --color-surface-border: rgba(255, 255, 255, 0.08);
   --color-surface-blur: blur(12px);
   --color-shadow-fluent: 0 4px 40px rgba(0, 0, 0, 0.5);
 
-  /* Text - Dark Mode */
+  /* Text — Dark Mode */
   --color-text-primary: #ffffff;
   --color-text-secondary: #a3a3a3;
   --color-text-muted: #6b6b6b;
@@ -60,30 +59,27 @@ html, body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Light mode dynamic gradients */
-:root body {
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.06) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(100, 149, 237, 0.03) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(230, 220, 252, 0.05) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(212, 175, 55, 0.04) 0px, transparent 50%);
-  background-size: 200% 200%;
-  animation: gradientShift 20s ease infinite;
-}
-
-/* Light mode dynamic gradients */
+/* ── LIGHT MODE: Warm white-goldish animated gradient ── */
+:root body,
 .light body {
-  background: linear-gradient(130deg, #f8fafc 0%, #ecfeff 35%, #f5f3ff 60%, #fef3c7 100%);
-  background-size: 250% 250%;
+  background: linear-gradient(
+    -45deg,
+    #faf8f3,
+    #fff8e8,
+    #fdf3d8,
+    #faf0e0,
+    #fff9ee
+  );
+  background-size: 400% 400%;
   animation: gradientShift 20s ease infinite;
 }
 
-/* Dark mode dynamic gradients */
+/* ── DARK MODE: Deep teal-green gradient ── */
 .dark body {
   background: linear-gradient(
     -45deg,
     #020202,
-    #042f2e, 
+    #042f2e,
     #020617,
     #064e3b,
     #020202
@@ -93,113 +89,104 @@ html, body {
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-surface-2);
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-surface-2); }
 ::-webkit-scrollbar-thumb {
   background: var(--color-surface-4);
   border-radius: 3px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-brand-green);
-}
+::-webkit-scrollbar-thumb:hover { background: var(--color-brand-gold); }
 
-/* Animations */
+/* ── Keyframe Animations ── */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
+  0%   { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.3); }
-  50% { box-shadow: 0 0 0 12px rgba(212, 175, 55, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.35); }
+  50%       { box-shadow: 0 0 0 12px rgba(212, 175, 55, 0); }
 }
 
 @keyframes sweep {
-  0% { transform: translateX(-100%); }
+  0%   { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50%       { transform: translateY(-10px); }
 }
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 3s infinite;
-}
+/* ── Utility Classes ── */
+.animate-fade-in-up    { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-pulse-glow    { animation: pulse-glow 3s infinite; }
+.animate-float         { animation: float 6s ease-in-out infinite; }
+.animate-sweep         { animation: sweep 2.4s linear infinite; }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* Premium noise overlay utility */
+/* ── Noise Overlay ── */
 .bg-noise {
-  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-  opacity: 0.2;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23n)"/%3E%3C/svg%3E');
+  opacity: 0.06;
   pointer-events: none;
   position: absolute;
   inset: 0;
   z-index: 10;
   mix-blend-mode: overlay;
 }
-
 .dark .bg-noise {
   opacity: 0.03;
   mix-blend-mode: normal;
 }
 
-/* Grade colors */
+/* ── Grade Color Tokens ── */
 .grade-a {
   --grade-color: #D4AF37;
-  --grade-bg: rgba(212, 175, 55, 0.05);
-  --grade-border: rgba(212, 175, 55, 0.2);
+  --grade-bg: rgba(212, 175, 55, 0.06);
+  --grade-border: rgba(212, 175, 55, 0.22);
 }
 .grade-b {
   --grade-color: #C0C0C0;
-  --grade-bg: rgba(192, 192, 192, 0.05);
-  --grade-border: rgba(192, 192, 192, 0.2);
+  --grade-bg: rgba(192, 192, 192, 0.06);
+  --grade-border: rgba(192, 192, 192, 0.22);
 }
 .grade-c {
   --grade-color: #CD7F32;
-  --grade-bg: rgba(205, 127, 50, 0.05);
-  --grade-border: rgba(205, 127, 50, 0.2);
+  --grade-bg: rgba(205, 127, 50, 0.06);
+  --grade-border: rgba(205, 127, 50, 0.22);
 }
 
-/* Gradient text */
+/* ── Gradient Text ── */
 .gradient-text-gold {
   background: linear-gradient(135deg, #F3E5AB, #D4AF37, #AA8C2C);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-
-.gradient-text-green {
-  background: linear-gradient(135deg, #33ffb1, #00ff9d);
+.gradient-text-orange {
+  background: linear-gradient(135deg, #fde68a, #f97316, #c2410c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glass card & Bento Box */
+/* ── Glass Card (Fluent Acrylic) ── */
 .glass-card {
   background: var(--color-surface-card);
   backdrop-filter: var(--color-surface-blur);
@@ -208,21 +195,45 @@ html, body {
   box-shadow: var(--color-shadow-fluent);
 }
 
-/* Hover shimmer effect */
+/* Dark mode glass gets a slight glow */
+.dark .glass-card {
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Light mode glass: warm shadow */
+:root .glass-card {
+  box-shadow: 0 4px 24px rgba(180, 140, 60, 0.1), 0 1px 2px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* ── Hover Shimmer ── */
 .shimmer-hover {
   position: relative;
   overflow: hidden;
 }
-
 .shimmer-hover::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(105deg, transparent 40%, rgba(201, 168, 76, 0.08) 50%, transparent 60%);
+  background: linear-gradient(105deg, transparent 40%, rgba(212, 175, 55, 0.08) 50%, transparent 60%);
   transform: translateX(-100%);
   transition: transform 0.6s ease;
 }
-
 .shimmer-hover:hover::after {
   transform: translateX(100%);
+}
+
+/* ── Fluent Focus Ring ── */
+:focus-visible {
+  outline: 2px solid var(--color-brand-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Input Base Style ── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea {
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }

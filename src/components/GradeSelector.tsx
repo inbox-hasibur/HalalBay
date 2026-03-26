@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Grade, products } from "@/lib/mockData";
+import { Grade, Product } from "@/lib/mockData";
 import { useCartStore } from "@/store/useCartStore";
 
 function formatPrice(n: number) {
@@ -27,11 +27,12 @@ const GRADE_STYLES: Record<string, {
 };
 
 interface GradeSelectorProps {
+  product: Product;
   grades: Grade[];
   onGradeChange?: (grade: Grade) => void;
 }
 
-export default function GradeSelector({ grades, onGradeChange }: GradeSelectorProps) {
+export default function GradeSelector({ product, grades, onGradeChange }: GradeSelectorProps) {
   const defaultGrade = grades.find(g => g.inStock) || grades[0];
   const [selected, setSelected] = useState<Grade>(defaultGrade);
   const { addItem } = useCartStore();
@@ -43,13 +44,7 @@ export default function GradeSelector({ grades, onGradeChange }: GradeSelectorPr
   };
 
   const handleAcquire = () => {
-    // Note: Since we only have grades and product id logic relies on mockData, 
-    // we'll fetch the parent product via mockData or pass it down. 
-    // Let's pass the product down to GradeSelector if we want, or mock a product.
-    // For now we'll mock the product parameter since the cart needs a Product object.
-    const mockProduct = products.find(p => p.grades.some(g => g.label === selected.label)) || products[0];
-    addItem(mockProduct, selected);
-    // don't toggle cart manually if addItem already opens it, which it does.
+    addItem(product, selected);
   };
 
   const style = GRADE_STYLES[selected.label] || GRADE_STYLES["A"];
@@ -245,4 +240,4 @@ export default function GradeSelector({ grades, onGradeChange }: GradeSelectorPr
   );
 }
 
-export { type GradeSelectorProps };
+export type { GradeSelectorProps };

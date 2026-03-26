@@ -2,7 +2,7 @@
 
 import { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Float, Environment, ContactShadows } from '@react-three/drei';
+import { Float, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTheme } from 'next-themes';
 
@@ -14,16 +14,14 @@ export default function TrustToken() {
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { viewport } = useThree();
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
-  // Use resolvedTheme for accurate hydration matching
+  useEffect(() => { setMounted(true); }, []);
+
   const isDark = mounted ? (theme === 'dark' || resolvedTheme === 'dark') : true;
 
-  // Responsive scale: smaller on mobile
-  const scale = viewport.width < 768 ? 0.8 : 1.5;
+  // Mobile: smaller scale; Desktop: full scale
+  const isMobile = viewport.width < 6; // R3F viewport units (not px)
+  const scale = isMobile ? 0.65 : 1.4;
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -31,8 +29,6 @@ export default function TrustToken() {
       meshRef.current.rotation.x = Math.sin(t * 0.2) * 0.3;
       meshRef.current.rotation.y = t * 0.4;
     }
-    
-    // Orbital path for exterior gradient lights
     if (light1.current) {
       light1.current.position.set(Math.sin(t) * 3, Math.cos(t * 0.8) * 3, Math.sin(t * 0.5) * 3);
     }
@@ -53,61 +49,66 @@ export default function TrustToken() {
         position: [
           Math.sin(angle) * radius,
           Math.cos(angle) * radius,
-          (Math.random() - 0.5) * 3
-        ] as [number, number, number]
+          (Math.random() - 0.5) * 3,
+        ] as [number, number, number],
       };
     });
   }, []);
 
   return (
     <>
-      <Environment preset={isDark ? "city" : "sunset"} />
-      <ambientLight intensity={isDark ? 0.5 : 0.25} color={isDark ? "#ffffff" : "#f8fbff"} />
-      <directionalLight position={[5, 8, 5]} intensity={isDark ? 0.6 : 0.75} color={isDark ? "#a8c4ff" : "#ffd580"} />
+      <ambientLight intensity={isDark ? 0.4 : 0.3} color={isDark ? '#ffffff' : '#fff8f0'} />
+      <directionalLight
+        position={[5, 8, 5]}
+        intensity={isDark ? 0.6 : 0.9}
+        color={isDark ? '#a8c4ff' : '#ffb347'}
+      />
 
       <Float speed={2} rotationIntensity={0.5} floatIntensity={1.5} floatingRange={[-0.2, 0.2]}>
-        
-        {/* Animated exterior sweeping lights (Fluent Abstract Multi-Color) */}
-        <pointLight ref={light1} color={isDark ? "#00e5ff" : "#4f46e5"} intensity={60} distance={10} />
-        <pointLight ref={light2} color={isDark ? "#b026ff" : "#ea580c"} intensity={60} distance={10} />
-        <pointLight ref={light3} color={isDark ? "#ff3366" : "#16a34a"} intensity={60} distance={10} />
 
-        {/* Matte Opaque Material */}
+        {/* Orbital sweeping lights */}
+        {/* Dark: cyan/magenta/red  |  Light: warm orange/amber/gold */}
+        <pointLight ref={light1} color={isDark ? '#00e5ff' : '#f97316'} intensity={60} distance={10} />
+        <pointLight ref={light2} color={isDark ? '#b026ff' : '#f59e0b'} intensity={60} distance={10} />
+        <pointLight ref={light3} color={isDark ? '#ff3366' : '#d97706'} intensity={60} distance={10} />
+
+        {/* Main mesh */}
         <mesh ref={meshRef} scale={scale}>
           <torusKnotGeometry args={[1, 0.35, 128, 32]} />
-          <meshStandardMaterial 
-            color={isDark ? "#f5f6f7" : "#1e3a8a"} 
-            roughness={0.5}
-            metalness={0.7}
-            emissive={isDark ? "#2a82ff" : "#7f1d1d"}
-            emissiveIntensity={isDark ? 0.1 : 0.25}
+          <meshStandardMaterial
+            /* Dark: near-white silver  |  Light: warm orange */
+            color={isDark ? '#f5f6f7' : '#f97316'}
+            roughness={0.4}
+            metalness={0.75}
+            emissive={isDark ? '#2a82ff' : '#ea580c'}
+            emissiveIntensity={isDark ? 0.1 : 0.18}
           />
         </mesh>
 
-        {/* Floating Data Particles */}
+        {/* Floating data particles */}
         {particles.map(({ key, position }) => (
           <mesh key={key} position={position}>
             <sphereGeometry args={[0.08, 16, 16]} />
-            <meshStandardMaterial 
-              color={isDark ? "#60a5fa" : "#0f172a"}
-              emissive={isDark ? "#34d399" : "#facc15"}
-              emissiveIntensity={isDark ? 2 : 2.5}
+            <meshStandardMaterial
+              color={isDark ? '#60a5fa' : '#fbbf24'}
+              emissive={isDark ? '#34d399' : '#f97316'}
+              emissiveIntensity={isDark ? 2 : 2.2}
               roughness={0.2}
               metalness={0.8}
             />
           </mesh>
         ))}
       </Float>
-      
-      {/* Soft shadow for Fluent depth */}
+
+      {/* Soft contact shadow for depth in light mode */}
       {!isDark && (
-        <ContactShadows 
-          position={[0, -3.5, 0]} 
-          opacity={0.4} 
-          scale={10} 
-          blur={2.5} 
-          far={4} 
-          color="#000000"
+        <ContactShadows
+          position={[0, -3.5, 0]}
+          opacity={0.25}
+          scale={10}
+          blur={2.5}
+          far={4}
+          color="#7c3000"
         />
       )}
     </>

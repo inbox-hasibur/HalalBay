@@ -5,7 +5,6 @@ import ProductCard from "@/components/ProductCard";
 import { products } from "@/lib/mockData";
 import { Canvas } from "@react-three/fiber";
 import TrustToken from "@/components/TrustToken";
-import { Environment } from "@react-three/drei";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 
@@ -57,29 +56,19 @@ export default function Home() {
     <div className="flex flex-col min-h-screen overflow-hidden bg-[var(--color-surface-1)] selection:bg-[var(--color-brand-gold)] selection:text-black relative">
       <div className="bg-noise" />
       
-      {/* Epic Ambient Mesh Gradient Background */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-60 dark:opacity-30 mix-blend-multiply dark:mix-blend-screen">
-        <motion.div 
-          animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-[20%] -left-[10%] w-0 h-0 rounded-full blur-[120px] md:blur-[250px]"
-          style={{
-            borderTop: '40vw solid #0d9488',
-            borderRight: '40vw solid var(--color-brand-gold)',
-            borderBottom: '40vw solid #e11d48',
-            borderLeft: '40vw solid #4f46e5'
-          }}
+      {/* Ambient Gradient Orbs */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div
+          className="absolute -top-[20%] -left-[15%] w-[60vw] h-[60vw] rounded-full opacity-[0.06] dark:opacity-[0.04] blur-[120px]"
+          style={{ background: 'radial-gradient(circle, var(--color-brand-gold) 0%, transparent 70%)' }}
         />
-        <motion.div 
-          animate={{ rotate: [360, 0], scale: [1, 1.2, 1] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute -bottom-[20%] -right-[10%] w-0 h-0 rounded-full blur-[120px] md:blur-[250px]"
-          style={{
-            borderTop: '50vw solid #0ea5e9',
-            borderRight: '50vw solid #f97316',
-            borderBottom: '50vw solid #065f46',
-            borderLeft: '50vw solid #9333ea'
-          }}
+        <div
+          className="absolute -bottom-[20%] -right-[15%] w-[70vw] h-[70vw] rounded-full opacity-[0.05] dark:opacity-[0.04] blur-[120px]"
+          style={{ background: 'radial-gradient(circle, #f97316 0%, transparent 70%)' }}
+        />
+        <div
+          className="absolute top-[40%] left-[40%] w-[40vw] h-[40vw] rounded-full opacity-[0.03] dark:opacity-[0.02] blur-[100px]"
+          style={{ background: 'radial-gradient(circle, #0d9488 0%, transparent 70%)' }}
         />
       </div>
 
@@ -89,12 +78,8 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] bg-[var(--color-brand-gold)] opacity-[0.08] blur-[120px] rounded-full pointer-events-none" />
 
         {/* 3D Background */}
-        <div className="absolute inset-x-0 h-[100%] top-0 z-0 pointer-events-none dark:mix-blend-screen opacity-90 transition-all duration-500">
+        <div className="absolute inset-x-0 h-[100%] top-0 z-0 pointer-events-none opacity-90 transition-all duration-500">
           <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-            <ambientLight intensity={0.2} />
-            <directionalLight position={[10, 10, 5]} intensity={2} color="#ffffff" />
-            <spotLight position={[-10, 10, -5]} intensity={1} color="#D4AF37" />
-            <Environment preset="city" />
             <TrustToken />
           </Canvas>
         </div>
