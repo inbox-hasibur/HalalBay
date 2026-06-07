@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛡️ HalalBay - The New Standard of Trust
 
-## Getting Started
+📍 **URL:** [https://halalbay.vercel.app/](https://halalbay.vercel.app/)
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) ![Firebase](https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black) ![Three.js](https://img.shields.io/badge/Three.js-black?style=for-the-badge&logo=three.js&logoColor=white)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+HalalBay is a modern, optimized, and highly responsive web application designed for users who seek absolute truth and transparency in their purchases. Every product is exclusively sourced, graded, and verified by our experts. Zero third-party sellers. Zero fakes.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✨ Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🛡️ **Absolute Truth & Verification**
+- **In-House Vault:** No third-party sellers. Every item is verified, authenticated, and stocked in our own secure vault before reaching you.
+- **Clear Quality & Price Tiers:** We tell you the absolute truth with our transparent grading system (Grade A, Grade B, Grade C).
+- **Zero Noise:** No duplicate listings. One product page, select the grade you prefer.
 
-## Learn More
+🚀 **Immersive & Smooth User Experience**
+- **3D Elements:** Beautiful interactive 3D trust tokens using WebGL.
+- **Optimized Performance:** Lazy loading implemented for heavy 3D components to ensure instant initial page loads.
+- **Smooth Animations:** High-quality scrolling and micro-interactions for a premium feel.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠 Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Frontend:** Next.js (App Router), Tailwind CSS
+- **Backend/Database:** Firebase
+- **3D Graphics:** Three.js

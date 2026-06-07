@@ -3,10 +3,11 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { products } from "@/lib/mockData";
-import { Canvas } from "@react-three/fiber";
-import TrustToken from "@/components/TrustToken";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
+import dynamic from "next/dynamic";
+
+const Hero3D = dynamic(() => import("@/components/Hero3D"), { ssr: false });
 
 export default function Home() {
   const featuredProducts = products.slice(0, 4);
@@ -79,9 +80,7 @@ export default function Home() {
 
         {/* 3D Background */}
         <div className="absolute inset-x-0 h-[100%] top-0 z-0 pointer-events-none opacity-90 transition-all duration-500">
-          <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-            <TrustToken />
-          </Canvas>
+          <Hero3D />
         </div>
 
         {/* Floating Abstract Shapes */}
